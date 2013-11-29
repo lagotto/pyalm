@@ -2,6 +2,7 @@ try:
     from api_key import *
 
 except ImportError: # This will happen when external integration platforms try to get key
+    API_KEY = {}
     API_KEY['plos'] = 'FAKE-TEST-KEY'
 
 APIS = { 'plos'       : {

@@ -70,7 +70,7 @@ class TestOffline(unittest.TestCase):
         self.test_response_mendeley_event_url = u'http://www.mendeley.com/research/ecological-guild-evolution-discovery-worlds-smallest-vertebrate/'
         self.test_source = 'twitter'
 
-        with open('test_data_history.json', 'r') as f:
+        with open('test/test_data_history.json', 'r') as f:
             self.json_body = json.load(f)[0]
         self.mock_resp = pyalm.ArticleALM(self.json_body)
         self.mock_resp._resp_json = self.json_body

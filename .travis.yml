@@ -5,6 +5,9 @@ python:
   - "3.2"
   - "3.3"
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install:
+  - python setup.py 
+  - "pip install -r requirements.txt"
 # command to run tests
-script: python test/py-alm-tests.py
+script: 
+  - python test/py-alm-tests.py

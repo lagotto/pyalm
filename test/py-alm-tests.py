@@ -16,7 +16,7 @@ class testOnlineTests(unittest.TestCase):
         self.test_response_title2 = "Mitochondrial Electron Transport Is the Cellular Target of the Oncology Drug Elesclomol"
         self.test_response_views = 29278
         self.test_response_views2 = 2909
-        self.test_response_publication_date = datetime.datetime(2012, 01, 11, 8, 0, 0)
+        self.test_response_publication_date = datetime.datetime(2012, 1, 11, 8, 0, 0)
         self.test_response_mendeley_event_url = u'http://www.mendeley.com/research/ecological-guild-evolution-discovery-worlds-smallest-vertebrate/'
         self.test_source = 'twitter,counter,crossref,wikipedia,mendeley'
 
@@ -59,14 +59,13 @@ class testOnlineTests(unittest.TestCase):
         self.assertGreaterEqual(self.resp[1].views, self.test_response_views2)
 
 
-#@unittest.skip('test')
 class TestOffline(unittest.TestCase):
     def setUp(self):
         self.test_doi = "10.1371/journal.pone.0029797"
         self.test_response_doi = "10.1371/journal.pone.0029797"
         self.test_response_title = "TEST-JSON: Ecological Guild Evolution and the Discovery of the World's Smallest Vertebrate"
         self.test_response_views = 29278
-        self.test_response_publication_date = datetime.datetime(2012, 01, 11, 8, 0, 0)
+        self.test_response_publication_date = datetime.datetime(2012, 1, 11, 8, 0, 0)
         self.test_response_mendeley_event_url = u'http://www.mendeley.com/research/ecological-guild-evolution-discovery-worlds-smallest-vertebrate/'
         self.test_source = 'twitter'
 

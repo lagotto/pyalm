@@ -30,7 +30,3 @@ pyalm is currently tested via a small unittest suite and continuous integration 
 Travis-CI with tests run for Python 2.7. Feel free to fork and to issue a pull request 
 for any contributions and improvements (including getting it to pass tests under other
 Python versions).
-
-Note that the current test suite skips a set of live tests of the API because there is
-no API key available. For your own satisfaction you should feel free to unskip those 
-tests and run them once you have an API key in place.

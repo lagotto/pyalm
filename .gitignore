@@ -1,9 +1,6 @@
 # Compiled python modules.
 *.pyc
 
-# File containing API Key
-pyalm/api_key.py
-
 # Setuptools distribution folder.
 /dist/
 

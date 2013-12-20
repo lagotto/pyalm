@@ -4,7 +4,7 @@ import datetime
 import pprint
 import json
 
-@unittest.skip('Test for live API which require an API Key. See pyalm.api_key.example')
+#@unittest.skip('Test for live API which require an API Key. See pyalm.api_key.example')
 class testOnlineTests(unittest.TestCase):
 
     def setUp(self):

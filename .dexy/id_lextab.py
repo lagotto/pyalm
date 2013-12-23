@@ -1,0 +1,9 @@
+# id_lextab.py. This file automatically created by PLY (version 3.4). Don't edit!
+_tabversion   = '3.4'
+_lextokens    = {'DBLQUOTE': 1, 'CODE': 1, 'END': 1, 'WHITESPACE': 1, 'COLONS': 1, 'NEWLINE': 1, 'WORD': 1, 'SGLQUOTE': 1, 'IDIOCLOSE': 1, 'AT': 1, 'EXP': 1, 'IDIO': 1, 'AMP': 1, 'IDIOOPEN': 1}
+_lexreflags   = 0
+_lexliterals  = ''
+_lexstateinfo = {'idiostart': 'exclusive', 'INITIAL': 'inclusive', 'idio': 'exclusive'}
+_lexstatere   = {'idiostart': [('(?P<t_idiostart_COMMENT>\\#|%|;|/)|(?P<t_idiostart_SPACE>\\ +)|(?P<t_idiostart_ABORT>[^#;/% ])', [None, ('t_idiostart_COMMENT', 'COMMENT'), ('t_idiostart_SPACE', 'SPACE'), ('t_idiostart_ABORT', 'ABORT')])], 'INITIAL': [('(?P<t_IDIOOPEN>(<!--|/\\*\\*\\*)\\ +@?)|(?P<t_COMMENT>\\#|%|;|/)|(?P<t_NEWLINE>\\r\\n|\\n|\\r)|(?P<t_WHITESPACE>[\\ \\t]+)|(?P<t_CODE>[^\\#/\\n\\r]+)', [None, ('t_IDIOOPEN', 'IDIOOPEN'), None, ('t_COMMENT', 'COMMENT'), ('t_NEWLINE', 'NEWLINE'), ('t_WHITESPACE', 'WHITESPACE'), ('t_CODE', 'CODE')])], 'idio': [('(?P<t_idio_AT>@)|(?P<t_idio_AMP>&)|(?P<t_idio_COLONS>:+)|(?P<t_idio_DBLQUOTE>")|(?P<t_idio_SGLQUOTE>\\\')|(?P<t_idio_EXP>export|section)|(?P<t_idio_END>end)|(?P<t_idio_WHITESPACE>(\\ |\\t)+)|(?P<t_idio_NEWLINE>\\r\\n|\\n|\\r)|(?P<t_idio_IDIOCLOSE>(-->)|(\\*/))|(?P<t_idio_WORD>[0-9a-zA-Z-_]+)|(?P<t_idio_OTHER>.)', [None, ('t_idio_AT', 'AT'), ('t_idio_AMP', 'AMP'), ('t_idio_COLONS', 'COLONS'), ('t_idio_DBLQUOTE', 'DBLQUOTE'), ('t_idio_SGLQUOTE', 'SGLQUOTE'), ('t_idio_EXP', 'EXP'), ('t_idio_END', 'END'), ('t_idio_WHITESPACE', 'WHITESPACE'), None, ('t_idio_NEWLINE', 'NEWLINE'), ('t_idio_IDIOCLOSE', 'IDIOCLOSE'), None, None, ('t_idio_WORD', 'WORD'), ('t_idio_OTHER', 'OTHER')])]}
+_lexstateignore = {'INITIAL': ''}
+_lexstateerrorf = {'idiostart': 't_idiostart_error', 'INITIAL': 't_error', 'idio': 't_idio_error'}

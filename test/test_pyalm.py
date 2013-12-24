@@ -4,7 +4,6 @@ import datetime
 import pprint
 import json
 
-#@unittest.skip('Test for live API which require an API Key. See pyalm.api_key.example')
 class testOnlineTests(unittest.TestCase):
 
     def setUp(self):
@@ -120,21 +119,6 @@ class TestSourcesHistories(TestOffline):
 
     def testTwitterHistory(self):
         timepoints = self.mock_resp.sources['twitter'].histories
-
-@unittest.skip('no need to print')
-class TestSourcesEvents(TestOffline):
-    def testTwitterEvents(self):
-        print "\n\nTwitter\n"
-        pprint.pprint(self.mock_resp.sources['twitter'].events[0])
-
-    def testWikipediaEvents(self):
-        print "\n\nWikipedia\n"
-        pprint.pprint(self.mock_resp.sources['wikipedia'].events)
-
-    def testCrossrefEvents(self):
-        print "\n\nCrossref\n"
-        pprint.pprint(self.mock_resp.sources['crossref'].events[0])
-
 
 
 if __name__ == "__main__":

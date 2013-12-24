@@ -1,4 +1,0 @@
-PatternNode(docs/*.md|jinja|markdown|easyhtml) (consolidated)
-    PatternNode(docs/examples/*.py|idio|pycon|pyg) (consolidated)
-        Doc(docs/examples/example.py|idio|pycon|pyg) (consolidated)
-    Doc(docs/index.md|jinja|markdown|easyhtml) (consolidated)

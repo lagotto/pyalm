@@ -1,3 +1,0 @@
-digraph G {
-"PatternNode(docs/*.md|jinja|markdown|easyhtml)" -> "PatternNode(docs/examples/*.py|idio|pycon|pyg)";
-}

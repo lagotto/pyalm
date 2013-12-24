@@ -34,7 +34,7 @@ def dictmapper(typename, mapping):
             return dict_value_from_path(cur_dict, path)
         return getter
 
-    prop_mapping = dict((k, property(getter_from_dict_path(v))) 
+    prop_mapping = dict((k, property(getter_from_dict_path(v)))
                         for k, v in mapping.iteritems())
     prop_mapping['__init__'] = init
     return type(typename, tuple(), prop_mapping)
@@ -46,3 +46,4 @@ class MappingRule(object):
 
     def __call__(self, d):
         return self.further_func(dict_value_from_path(d, self.path))
+

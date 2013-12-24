@@ -4,7 +4,7 @@ import datetime
 import pprint
 import json
 
-class testOnlineTests(unittest.TestCase):
+class TestOnline(unittest.TestCase):
 
     def setUp(self):
         self.test_doi = "10.1371/journal.pone.0029797"
@@ -22,6 +22,7 @@ class testOnlineTests(unittest.TestCase):
     def tearDown(self):
         del self.resp
 
+class TestRetrieveALMs(TestOnline):
     def testGet(self):
         self.resp = pyalm.get_alm(self.test_doi, source = self.test_source, info ='detail')
         #Basic Tests
@@ -50,12 +51,12 @@ class testOnlineTests(unittest.TestCase):
 
     def testGetMultipleDOIs(self):
         self.resp = pyalm.get_alm(self.test_two_dois, info='summary')
-        self.assertEqual(self.resp[0].title, self.test_response_title)
-        self.assertEqual(self.resp[0].doi, self.test_response_doi)
-        self.assertGreaterEqual(self.resp[0].views, self.test_response_views)
-        self.assertEqual(self.resp[1].title, self.test_response_title2)
-        self.assertEqual(self.resp[1].doi, self.test_response_doi2)
-        self.assertGreaterEqual(self.resp[1].views, self.test_response_views2)
+        self.assertEqual(self.resp[0].title, self.test_response_title2)
+        self.assertEqual(self.resp[0].doi, self.test_response_doi2)
+        self.assertGreaterEqual(self.resp[0].views, self.test_response_views2)
+        self.assertEqual(self.resp[1].title, self.test_response_title)
+        self.assertEqual(self.resp[1].doi, self.test_response_doi)
+        self.assertGreaterEqual(self.resp[1].views, self.test_response_views)
 
 
 class TestOffline(unittest.TestCase):
@@ -97,6 +98,8 @@ class TestSourcesAttributes(TestOffline):
     def testSourcesAttributes(self):
         self.assertEqual(self.mock_resp.sources['mendeley'].events_url,
                                        self.test_response_mendeley_event_url)
+        self.assertEqual(self.mock_resp.sources['mendeley'].update_date,
+                                        datetime.datetime(2013, 9, 15, 19, 42, 17))
 
 class TestSourcesMetrics(TestOffline):
     def testSourcesMetrics(self):

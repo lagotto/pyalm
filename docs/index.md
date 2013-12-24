@@ -5,9 +5,10 @@ Contents
 --------
 1. Basic usage
 	1. Summary level information
-	2. More detailed information
-2. Working with histories
-3. Working with events
+	2. More detailed source information
+2. Working with data
+	1. Working with events
+	2. Working with history
 
 Basic usage
 -----------
@@ -38,31 +39,58 @@ If a single DOI is given then the returned object will be an ArticleALM object. 
 multiple DOIs are requested then the returned object will be a list.
 {{  d['examples/example.py|idio|pycon|pyg']['multiple-dois'] }}
 
-###More Detailed Information###
+###More Detailed Source Information###
 
 To obtain more detailed information on each ALM source from the ALM API a request should 
-be made for from detailed information. The options available are `event` which provides 
-information on the specific events contributing to an ALM count. For instance, this will 
-provide information on the individual tweets contributing to the overall count. The
-`history` option provides information on the ALM over a series of timepoints. These
-timepoints are those when the ALM App polled the data source rather than the date or time
-of specific events. Finally the `detail` level provides both event and history data.
-
-For each level of detail a specific set of sources can be specified from one to a list,
+be made for from detailed information. The options available are `event`, `history`, and 
+`detail`. More information on the different levels can be found below. For all the info 
+levels a specific set of sources can be specified from one to a list,
 to all (by omitting the `source` option). Specific sources are then available via the 
 `sources` attribute of the returned object.
 
 {{  d['examples/example.py|idio|pycon|pyg']['get-event-level-cites'] }}
 
-Quantitative information is available for the requested sources whether the info level
-is set to `event`, `history`, or `detail`. Metrics are also divided into the same
-categories provided by summary level info (`views`, `shares`, 
-`bookmarks`, `citations`)
+Quantitative information is available for the requested sources divided into the same
+categories provided by summary level info (`views`, `shares`, `bookmarks`, `citations`).
+If a category is not populated, eg `shares` for the twitter source then it will return
+`None`.
 
 {{  d['examples/example.py|idio|pycon|pyg']['print-cites-metrics'] }}
+
+Further information about the source itself and the last time the ALM App instance
+updated its records are also available from attributes of the source object.
+
+{{  d['examples/example.py|idio|pycon|pyg']['source-cites-attributes'] }}
+
+Working with data
+-------------------
+When requesting more detailed data there are two options `event` and `history`. 
+The `history` option provides information on the ALM over a series of timepoints. These
+timepoints are those when the ALM App polled the data source rather than the date or time
+of specific events. Finally the `detail` level provides both event and history data.
+
+Event level data provides information on the specific events contributing to an ALM 
+count. For instance, this will provide information on the individual tweets contributing 
+to the overall count or individual citation events to the article of interest. 
+
+###Working with histories###
+
+History data is parsed from the original JSON to an ordered list of duples where the
+first element is a `datetime.datetime` object and the second is the integer total count 
+for that metric. It is obtained from the `histories` attribute of the source object. The 
+list is ordered from oldest to newest record. 
+
+{{  d['examples/example.py|idio|pycon|pyg']['get-history-level-cites'] }}
+
+The number of elements in the `histories` list reflects the frequency with which the 
+App instance updates the record and is not sensitive to the actual events which cause
+the count.
+  
+###Working with events###
 
 The event information is available via the `events` attribute on the source. Event data 
 is not currently parsed from the JSON object and needs to be handled by the user on a 
 source by source basis.
 
+{{  d['examples/example.py|idio|pycon|pyg']['get-event-level-cites'] }}
 {{  d['examples/example.py|idio|pycon|pyg']['print-cites-events'] }}

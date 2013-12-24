@@ -25,6 +25,19 @@ print "Number of articles retrieved:", len(articles), "\n"
 for article in articles:
     print article.title, "DOI:", article.doi, "Views:", article.views
 
+### @export "get-event-level-cites"
+article = alm.get_alm("10.1371/journal.pone.0029797", info="event", source="crossref")
+print article.sources['crossref']
+
+### @export "print-cites-metrics"
+print 'Total cites from Crossref:', article.sources['crossref'].metrics.total
+print '..is the same as # cites:', article.sources['crossref'].metrics.citations
+print '...and no shares:', article.sources['crossref'].metrics.shares
+
+### @export "print-cites-events"
+print 'The first recorded Crossref citation of the article:\n', article.sources['crossref'].events[0]
+
+
 
 
 

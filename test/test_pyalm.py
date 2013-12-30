@@ -8,7 +8,7 @@ class TestOnline(unittest.TestCase):
 
     def setUp(self):
         self.test_doi = "10.1371/journal.pone.0029797"
-        self.test_two_dois = "10.1371/journal.pone.0029797,10.1371/journal.pone.0029798"
+        self.test_two_dois = ["10.1371/journal.pone.0029797","10.1371/journal.pone.0029798"]
         self.test_response_doi = "10.1371/journal.pone.0029797"
         self.test_response_doi2 = "10.1371/journal.pone.0029798"
         self.test_response_title = "Ecological Guild Evolution and the Discovery of the World's Smallest Vertebrate"
@@ -51,12 +51,12 @@ class TestRetrieveALMs(TestOnline):
 
     def testGetMultipleDOIs(self):
         self.resp = pyalm.get_alm(self.test_two_dois, info='summary')
-        self.assertEqual(self.resp[0].title, self.test_response_title2)
-        self.assertEqual(self.resp[0].doi, self.test_response_doi2)
-        self.assertGreaterEqual(self.resp[0].views, self.test_response_views2)
-        self.assertEqual(self.resp[1].title, self.test_response_title)
-        self.assertEqual(self.resp[1].doi, self.test_response_doi)
-        self.assertGreaterEqual(self.resp[1].views, self.test_response_views)
+        self.assertEqual(self.resp[0].title, self.test_response_title)
+        self.assertEqual(self.resp[0].doi, self.test_response_doi)
+        self.assertGreaterEqual(self.resp[0].views, self.test_response_views)
+        self.assertEqual(self.resp[1].title, self.test_response_title2)
+        self.assertEqual(self.resp[1].doi, self.test_response_doi2)
+        self.assertGreaterEqual(self.resp[1].views, self.test_response_views2)
 
 
 class TestOffline(unittest.TestCase):

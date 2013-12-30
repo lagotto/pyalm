@@ -93,7 +93,7 @@ class ArticleALM(ArticleALMBase):
 
 
 def get_alm(identifiers,
-            type = None,
+            id_type = None,
             info = None,
             source = None,
             days = None,
@@ -104,9 +104,12 @@ def get_alm(identifiers,
     Get summary level alms based on an identifier or identifiers
     """
 
+    if type(identifiers) != str:
+        identifiers = ','.join(identifiers)
+
     parameters = {'ids' : identifiers,
                   'api_key' : config.APIS.get(instance).get('key'),
-                  'type' : type,
+                  'type' : id_type,
                   'info' : info,
                   'source' : source,
                   'days' : days,

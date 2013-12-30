@@ -36,7 +36,9 @@ attribute of the response:
 {{  d['examples/example.py|idio|pycon|pyg']['print-stats'] }}
 
 If a single DOI is given then the returned object will be an ArticleALM object. If 
-multiple DOIs are requested then the returned object will be a list.
+multiple DOIs are requested then the returned object will be a list. Multiple DOIs 
+should be passed to the `get` method as a list of strings.
+
 {{  d['examples/example.py|idio|pycon|pyg']['multiple-dois'] }}
 
 ###More Detailed Source Information###

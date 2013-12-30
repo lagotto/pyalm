@@ -26,10 +26,6 @@ class TestSourcesEvents(TestOffline):
         self.assertEqual(tweets[8].url, "http://twitter.com/didicikit/status/313850610174799873")
 
 
-#     def testWikipediaEvents(self):
-#         print "\n\nWikipedia\n"
-#         pprint.pprint(self.mock_resp.sources['wikipedia'].events)
-#
     def testCrossrefEvents(self):
         cites = []
         for cite in self.mock_resp.sources['crossref'].events:

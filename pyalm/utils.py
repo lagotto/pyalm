@@ -1,3 +1,11 @@
+# This file used directly from the orcid-python library by Matt Luongo
+#
+# Used under the terms of the MIT license as per:
+# https://github.com/scholrly/orcid-python/blob/master/LICENSE-MIT.txt
+#
+# Original version available at:
+# https://github.com/scholrly/orcid-python/blob/bd4b7b350098c625bc05cbb260435a42a951bff2/orcid/utils.py
+
 def dict_value_from_path(d, path):
     cur_dict = d
     for key in path[:-1]:

@@ -21,7 +21,7 @@ article.citations
 
 ### @export "multiple-dois"
 articles = alm.get_alm(
-        "10.1371/journal.pone.0029797,10.1371/journal.pone.0029798",
+        ["10.1371/journal.pone.0029797","10.1371/journal.pone.0029798"],
         info="summary")
 len(articles)
 for article in articles:

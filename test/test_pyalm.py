@@ -24,7 +24,7 @@ class TestOnline(unittest.TestCase):
 
 class TestRetrieveALMs(TestOnline):
     def testGet(self):
-        self.resp = pyalm.get_alm(self.test_doi, source = self.test_source, info ='detail')
+        self.resp = pyalm.get_alm(self.test_doi, source = self.test_source, info ='detail')[0]
         #Basic Tests
         self.assertEqual(self.resp.title, self.test_response_title)
         self.assertEqual(self.resp.doi, self.test_response_doi)

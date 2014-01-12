@@ -123,17 +123,13 @@ def get_alm(identifiers,
                         params = parameters,
                         headers = BASE_HEADERS)
 
-        if resp.status_code != 200:
-            print "\nStatus Code:", resp.status_code
+        resp.raise_for_status()
 
-        if len(resp.json()) == 1:
-            return _process_json_to_article(resp.json()[0])
-        elif len(resp.json()) > 1:
-            articles = []
-            for article_json in resp.json():
-                articles.append(_process_json_to_article(article_json))
+        articles = []
+        for article_json in resp.json():
+            articles.append(_process_json_to_article(article_json))
 
-            return articles
+        return articles
 
     else:
         raise

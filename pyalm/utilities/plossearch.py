@@ -1,8 +1,8 @@
-import requests
-import pyalm.config as config
-import json
 import datetime
 import time
+import requests
+import pyalm.config
+
 
 BASE_HEADERS = {'Accept':'application/json'}
 
@@ -13,40 +13,40 @@ SEARCH_URL = 'http://api.plos.org/search?q='
    _JMap - map a journal name to a url.
 '''
 _JMap = {
-		'PLoS Biology'               : 'http://www.plosbiology.org',
-		'PLoS Genetics'              : 'http://www.plosgenetics.org',
-		'PLoS Computational Biology' : 'http://www.ploscompbiol.org',
-		'PLoS Medicine'              : 'http://www.plosmedicine.org',
-		'PLoS ONE'                   : 'http://www.plosone.org',
-		'PLoS Neglected Tropical Diseases' : 'http://www.plosntds.org',
-		'PLoS Clinical Trials'       : 'http://clinicaltrials.ploshubs.org',
-		'PLoS Pathogens'             : 'http://www.plospathogens.org'
-	    }
+        'PLoS Biology'               : 'http://www.plosbiology.org',
+        'PLoS Genetics'              : 'http://www.plosgenetics.org',
+        'PLoS Computational Biology' : 'http://www.ploscompbiol.org',
+        'PLoS Medicine'              : 'http://www.plosmedicine.org',
+        'PLoS ONE'                   : 'http://www.plosone.org',
+        'PLoS Neglected Tropical Diseases' : 'http://www.plosntds.org',
+        'PLoS Clinical Trials'       : 'http://clinicaltrials.ploshubs.org',
+        'PLoS Pathogens'             : 'http://www.plospathogens.org'
+        }
 '''
    _JIds - map a 4 character journal id to quoted journal name.
 '''
 _JIds = {
-		'pbio' : '"PLoS Biology"',
-		'pgen' : '"PLoS Genetics"',
-		'pcbi' : '"PLoS Computational Biology"',
-		'pmed' : '"PLoS Medicine"',
-		'pone' : '"PLoS ONE"',
-		'pntd' : '"PLoS Neglected Tropical Diseases"',
-		'pctr' : '"PLoS Clinical Trials"',
-		'ppat' : '"PLoS Pathogens"'
-	}
+        'pbio' : '"PLoS Biology"',
+        'pgen' : '"PLoS Genetics"',
+        'pcbi' : '"PLoS Computational Biology"',
+        'pmed' : '"PLoS Medicine"',
+        'pone' : '"PLoS ONE"',
+        'pntd' : '"PLoS Neglected Tropical Diseases"',
+        'pctr' : '"PLoS Clinical Trials"',
+        'ppat' : '"PLoS Pathogens"'
+    }
 
 def articleUrl(doi,jid):
     '''
-		articleUrl- return a valid link to the article page given the journal
-		            4 character identifier and the article doi.
+        articleUrl- return a valid link to the article page given the journal
+                    4 character identifier and the article doi.
     '''
     return _JMap[jid] + '/article/' + quote('info:doi/' + doi)
 
 def articleXML(doi,jid):
     '''
-		articleXML - return a valid link to the article XML give the journal
-		             4 character identifier and the article doi.
+        articleXML - return a valid link to the article XML give the journal
+                     4 character identifier and the article doi.
     '''
     return _JMap[jid] + '/article/fetchObjectAttachment.action?uri=' + quote('info:doi/' + doi) +\
            '&representation=XML'
@@ -61,18 +61,18 @@ class Request:
                 start=0, limit=99, maxRows=100, verbose=False, delay = 0.5):
         self.start = start
         self.limit = limit
-        self.maxRows = limit if limit < maxRows else maxRows
+        self.maxrows = limit if limit < maxRows else maxRows
         self.delay = delay
         self.query = query
         self.fields = fields
         self.instance = instance
-        self.api_key = config.APIS.get(self.instance).get('key')
+        self.api_key = pyalm.config.APIS.get(self.instance).get('key')
         self._query_text = ''
         self._api_url = SEARCH_URL
         self._headers = BASE_HEADERS
         self._params = {
                     'start': str(self.start),
-                    'rows': str(self.maxRows),
+                    'rows': str(self.maxrows),
                     'fq': 'doc_type:full AND !article_type_facet:"Issue Image"',
                     'wt': 'json',
                     'api_key' : self.api_key
@@ -98,7 +98,7 @@ class Request:
         if end:
             end_date = self._process_dates(end)
         else:
-            end = datetime.datetime.now().isoformat()
+            end_date = datetime.datetime.now().isoformat()
 
         self.query['publication_date'] = '[%sZ TO %sZ]' % (start_date, end_date)
 
@@ -112,8 +112,7 @@ class Request:
 
         start_date = datetime.datetime(int(year), 1, 1, 0, 0, 0).isoformat()
         end_date = datetime.datetime(int(year), 12, 31, 23, 59, 59).isoformat()
-
-        self.query['publication_date'] = '[%sZ TO %sZ]' % (start_date, end_date)
+        self.search_date(start_date, end_date)
 
     def _process_dates(self, date):
         """
@@ -130,8 +129,10 @@ class Request:
                 month = int(str(date).split('-')[1])
             except IndexError: # No month in the string
                 month = 1
+                day = 1
 
-            return datetime.datetime(year, month, 1, 0,0,0).isoformat()
+
+            return datetime.datetime(year, month, day, 0,0,0).isoformat()
 
 
     def add_field(self, field):
@@ -142,10 +143,17 @@ class Request:
 
 
     def _format_query(self):
-        _query_text = ''
-        _query_text = ' AND '.join(['%s:%s' % (k,v) for k,v in self.query.iteritems()])
-        self._query_text = _query_text
-        return _query_text
+        try:
+            _query_text = ''
+            _query_text = ' AND '.join(['%s:%s' % (k,v) for k,v in self.query.iteritems()])
+            self._query_text = _query_text
+            return _query_text
+        except AttributeError:
+            assert type(self.query) == str
+            self._query_text = self.query
+            return self._query_text
+            
+
 
     def _format_query_url(self):
         query_url = self._api_url + self._format_query()
@@ -169,7 +177,7 @@ class Request:
         return_json = response.json()
         self.response = response
         numFound = response.json().get('response').get('numFound')
-        start = self.start + self.maxRows
+        start = self.start + self.maxrows
         while len(return_json.get('response').get('docs')) < numFound:
             self._params['start'] = start
             params = self._finalize_params()
@@ -180,12 +188,11 @@ class Request:
             response.raise_for_status()
             return_json.get('response').get('docs').extend(paged_response.json().get('response').get('docs'))
             time.sleep(self.delay)
-            start += self.maxRows
+            start += self.maxrows
         return return_json
 
 
 def collect_dois(query, dates=None):
-    dois_to_return = []
     request = Request(query)
     if dates:
         try:

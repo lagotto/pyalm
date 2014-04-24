@@ -32,6 +32,4 @@ def _process_histories(history):
                            _parse_numbers_to_int(timepoint.get('total'))])
 
     timepoints.sort(key=lambda l: l[0])
-                    #if (len(timepoints) != len(counts)) or (len(timepoints) == 0):
-                    # return None
-    return timepoints#, counts
+    return timepoints

@@ -13,8 +13,8 @@ class TestOnline(unittest.TestCase):
         self.test_response_doi2 = "10.1371/journal.pone.0029798"
         self.test_response_title = "Ecological Guild Evolution and the Discovery of the World's Smallest Vertebrate"
         self.test_response_title2 = "Mitochondrial Electron Transport Is the Cellular Target of the Oncology Drug Elesclomol"
-        self.test_response_views = 29278
-        self.test_response_views2 = 2909
+        self.test_response_views = 32755
+        self.test_response_views2 = 3862
         self.test_response_publication_date = datetime.datetime(2012, 1, 11, 8, 0, 0)
         self.test_response_mendeley_event_url = u'http://www.mendeley.com/research/ecological-guild-evolution-discovery-worlds-smallest-vertebrate/'
         self.test_source = 'twitter,counter,crossref,wikipedia,mendeley'
@@ -47,16 +47,21 @@ class TestRetrieveALMs(TestOnline):
 
         #Sources histories tests
         timepoints = self.resp.sources['crossref'].histories
-        self.assertIsInstance(timepoints[0][0], datetime.datetime)
+        self.assertIsInstance(timepoints[0][0], datetime.datetime   )
 
     def testGetMultipleDOIs(self):
         self.resp = pyalm.get_alm(self.test_two_dois, info='summary')
-        self.assertEqual(self.resp[0].title, self.test_response_title2)
-        self.assertEqual(self.resp[0].doi, self.test_response_doi2)
-        self.assertGreaterEqual(self.resp[0].views, self.test_response_views2)
-        self.assertEqual(self.resp[1].title, self.test_response_title)
-        self.assertEqual(self.resp[1].doi, self.test_response_doi)
-        self.assertGreaterEqual(self.resp[1].views, self.test_response_views)
+        titles = [self.resp[0].title, self.resp[1].title]
+        dois = [self.resp[0].doi, self.resp[1].doi]
+        self.assertIn(self.test_response_title, titles)
+        self.assertIn(self.test_response_title2, titles)
+        self.assertIn(self.test_response_doi, dois)
+        self.assertIn(self.test_response_doi2, dois)
+
+        views = [self.resp[0].views, self.resp[1].views]
+        views.sort()
+        self.assertGreaterEqual(views[0], self.test_response_views2)
+        self.assertGreaterEqual(views[1], self.test_response_views)
 
 
 class TestOffline(unittest.TestCase):

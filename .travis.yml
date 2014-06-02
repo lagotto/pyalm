@@ -2,7 +2,7 @@ env:
   matrix: 
     secure: QSK5L4gbdxNxieufZ2qUkJa/RoFgPuehHuIj9orPHUVzusIERWnzwwZ+HB+72AfvsJdn6NZ90kFoj1M+J3bPtK5JdBoDfJRN2eH44l57zk5+6IIQcggeTm3DMKyWHNUs2yiiuZdfcrevVgX+Eeh7nufJP/Q0kG3Hq5E5t8PAHgU=
 script: 
-- python -m nosetests --with-coverage
+nosetests --with-coverage
 install: 
 - python setup.py install
 - pip install -r requirements.txt

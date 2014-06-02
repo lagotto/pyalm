@@ -7,8 +7,8 @@ Contents
 	1. Summary level information
 	2. More detailed source information
 2. Working with data
-	1. Working with events
-	2. Working with history
+	1. Working with history
+	2. Working with events
 
 Basic usage
 -----------
@@ -35,9 +35,9 @@ attribute of the response:
 {{  d['examples/example.py|idio|pycon|pyg']['print-ids'] }}
 {{  d['examples/example.py|idio|pycon|pyg']['print-stats'] }}
 
-If a single DOI is given then the returned object will be an ArticleALM object. If 
-multiple DOIs are requested then the returned object will be a list. Multiple DOIs 
-should be passed to the `get` method as a list of strings.
+The returned object is always a list of ArticleALM objects. If a single DOI is passed
+the list will be of length one. Multiple DOIs should be passed to the `get` method as a
+list of strings of the form `10.1371/journal.pgen.1004001`.
 
 {{  d['examples/example.py|idio|pycon|pyg']['multiple-dois'] }}
 
@@ -91,8 +91,10 @@ the count.
 ###Working with events###
 
 The event information is available via the `events` attribute on the source. Event data 
-is not currently parsed from the JSON object and needs to be handled by the user on a 
-source by source basis.
+is not parsed direct from the return JSON object and needs to be handled by the user
+depending on their needs.
 
 {{  d['examples/example.py|idio|pycon|pyg']['get-event-level-cites'] }}
 {{  d['examples/example.py|idio|pycon|pyg']['print-cites-events'] }}
+
+The `events` module provides a set of classes for handling specific types of events.

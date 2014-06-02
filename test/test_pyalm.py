@@ -46,17 +46,17 @@ class TestRetrieveALMs(TestOnline):
         self.assertGreaterEqual(self.resp.sources['twitter'].metrics.comments, 9)
 
         #Sources histories tests
-        timepoints = self.resp.sources['wikipedia'].histories
-        self.assertEqual(timepoints[0][0], datetime.datetime(2012, 9, 19, 12, 56, 23))
+        timepoints = self.resp.sources['crossref'].histories
+        self.assertIsInstance(timepoints[0][0], datetime.datetime)
 
     def testGetMultipleDOIs(self):
         self.resp = pyalm.get_alm(self.test_two_dois, info='summary')
-        self.assertEqual(self.resp[0].title, self.test_response_title)
-        self.assertEqual(self.resp[0].doi, self.test_response_doi)
-        self.assertGreaterEqual(self.resp[0].views, self.test_response_views)
-        self.assertEqual(self.resp[1].title, self.test_response_title2)
-        self.assertEqual(self.resp[1].doi, self.test_response_doi2)
-        self.assertGreaterEqual(self.resp[1].views, self.test_response_views2)
+        self.assertEqual(self.resp[0].title, self.test_response_title2)
+        self.assertEqual(self.resp[0].doi, self.test_response_doi2)
+        self.assertGreaterEqual(self.resp[0].views, self.test_response_views2)
+        self.assertEqual(self.resp[1].title, self.test_response_title)
+        self.assertEqual(self.resp[1].doi, self.test_response_doi)
+        self.assertGreaterEqual(self.resp[1].views, self.test_response_views)
 
 
 class TestOffline(unittest.TestCase):

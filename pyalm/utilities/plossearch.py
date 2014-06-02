@@ -110,8 +110,8 @@ class Request:
         element of datetime objects.
         """
 
-        start_date = datetime.datetime(int(year), 1, 1, 0, 0, 0).isoformat()
-        end_date = datetime.datetime(int(year), 12, 31, 23, 59, 59).isoformat()
+        start_date = datetime.datetime(int(year), 1, 1, 0, 0, 0)
+        end_date = datetime.datetime(int(year), 12, 31, 23, 59, 59)
         self.search_date(start_date, end_date)
 
     def _process_dates(self, date):
@@ -127,6 +127,10 @@ class Request:
             year = int(str(date).split('-')[0])
             try:
                 month = int(str(date).split('-')[1])
+                try:
+                    day = int(str(date).split('-')[2])
+                except IndexError:
+                    day = 1
             except IndexError: # No month in the string
                 month = 1
                 day = 1

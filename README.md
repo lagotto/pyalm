@@ -25,6 +25,7 @@ instructions on how to get an API key for the PLOS installation and where to put
 Testing and Contributions
 -------------------------
 [![Build Status](https://travis-ci.org/cameronneylon/pyalm.png?branch=master)](https://travis-ci.org/cameronneylon/pyalm)
+[![Coverage Status](https://img.shields.io/coveralls/cameronneylon/pyalm.svg)](https://coveralls.io/r/cameronneylon/pyalm?branch=master)
 
 pyalm is currently tested via a small unittest suite and continuous integration via
 Travis-CI with tests run for Python 2.7. Feel free to fork and to issue a pull request 

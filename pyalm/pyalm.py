@@ -104,7 +104,33 @@ def get_alm(identifiers,
             instance='plos'):
     """
     Get summary level alms based on an identifier or identifiers
+
+    :param ids: One or more DOIs, PMCIDs, etc.
+    :param api_key: An API key, looks for api key first, or pass one in.
+    :param id_type: One of doi, pmid, pmcid, or mendeley
+    :param info: One of summary or detail
+    :param source: One or more of the many sources.
+    :param days: deprecated in API v5
+    :param months: deprecated in API v5
+    :param years: deprecated in API v5
+    :param instance: One of plos, etc., Only plos works right now.
+
+    Usage:
+    >>> import pyalm
+    >>> # Get a single article
+    >>> article = pyalm.get_alm("10.1371/journal.pone.0029797", info="summary")
+    >>> article
+    >>> article[0].title
+    >>>
+    >>> # Multiple articles
+    >>> ids = ["10.1371/journal.pone.0029797","10.1371/journal.pone.0029798"]
+    >>> articles = pyalm.get_alm(ids, info="summary")
+    >>> len(articles)
+    >>> for article in articles:
+    >>>     print article.title,"DOI:", article.doi,
+    >>>     print "Views:", article.views
     """
+
 
     if type(identifiers) != str:
         identifiers = ','.join(identifiers)

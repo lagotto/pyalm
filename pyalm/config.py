@@ -6,7 +6,7 @@ except ImportError: # This will happen when external integration platforms try t
     API_KEY['plos'] = 'FAKE-TEST-KEY'
 
 APIS = { 'plos'       : {
-                          'url': "http://alm.plos.org/api/v3/articles",
+                          'url': "http://alm.plos.org/api/v5/articles",
                           'key': API_KEY.get('plos')
                         },
          'ojs'        : {

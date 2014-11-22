@@ -16,3 +16,6 @@
 
 # scotts notes
 scottnotes.md
+
+# ignore pycharm
+.idea/

@@ -6,19 +6,19 @@ import config
 BASE_HEADERS = {'Accept': 'application/json'}
 
 MetricsBase = dictmapper('MetricsBase',
-                         {'citations': to(['citations'],
+                         {'citations': MappingRule(['citations'],
                                           cleanup._parse_numbers_to_int),
-                          'comments': to(['comments'],
+                          'comments': MappingRule(['comments'],
                                          cleanup._parse_numbers_to_int),
-                          'groups': to(['groups'],
+                          'groups': MappingRule(['groups'],
                                        cleanup._parse_numbers_to_int),
-                          'likes': to(['likes'],
+                          'likes': MappingRule(['likes'],
                                       cleanup._parse_numbers_to_int),
-                          'pdf': to(['pdf'],
+                          'pdf': MappingRule(['pdf'],
                                     cleanup._parse_numbers_to_int),
-                          'shares': to(['shares'],
+                          'shares': MappingRule(['shares'],
                                        cleanup._parse_numbers_to_int),
-                          'total': to(['total'],
+                          'total': MappingRule(['total'],
                                       cleanup._parse_numbers_to_int)
                          }
 )
@@ -35,13 +35,13 @@ SourceBase = dictmapper('SourceBase',
                         {'name': ['name'],
                          'display_name': ['display_name'],
                          'events_url': ['events_url'],
-                         'update_date': to(['update_date'],
+                         'update_date': MappingRule(['update_date'],
                                            cleanup._parse_dates_to_datetime),
                          'events': ['events'],
-                         'metrics': to(['metrics'],
+                         'metrics': MappingRule(['metrics'],
                                        lambda l: Metrics(l)
                                        if l is not None else None),
-                         'histories': to(['histories'],
+                         'histories': MappingRule(['histories'],
                                          cleanup._process_histories)
                         }
 )
@@ -58,19 +58,19 @@ ArticleALMBase = dictmapper('ArticleALMBase',
                                 'mendeley_id': ['mendeley'],
                                 'pmcid': ['pmcid'],
                                 'pmid': ['pmid'],
-                                'publication_date': to(['publication_date'],
+                                'publication_date': MappingRule(['publication_date'],
                                                        cleanup._parse_dates_to_datetime),
-                                'update_date': to(['update_date'],
+                                'update_date': MappingRule(['update_date'],
                                                   cleanup._parse_dates_to_datetime),
                                 'url': ['url'],
                                 'title': ['title'],
-                                'citations': to(['citations'],
+                                'citations': MappingRule(['citations'],
                                                 cleanup._parse_numbers_to_int),
-                                'bookmarks': to(['bookmarks'],
+                                'bookmarks': MappingRule(['bookmarks'],
                                                 cleanup._parse_numbers_to_int),
-                                'shares': to(['shares'],
+                                'shares': MappingRule(['shares'],
                                              cleanup._parse_numbers_to_int),
-                                'views': to(['views'],
+                                'views': MappingRule(['views'],
                                             cleanup._parse_numbers_to_int)
                             }
 )
@@ -109,8 +109,8 @@ def get_alm(identifiers,
     :param id_type: One of doi, pmid, pmcid, or mendeley_uuid
     :param info: One of summary or detail
     :param source: One or more of the many sources.
-    :param rows: deprecated in API v5
-    :param page: deprecated in API v5
+    :param rows: Number of results to return, use in combination with page.
+    :param page: Page to return, use in combination with rows.
     :param instance: One of plos, etc., Only plos works right now.
 
     Usage:
@@ -151,7 +151,7 @@ def get_alm(identifiers,
         resp.raise_for_status()
 
         articles = []
-        for article_json in resp.json():
+        for article_json in resp.json()['data']:
             articles.append(_process_json_to_article(article_json))
 
         return articles

@@ -10,11 +10,13 @@ MetricsBase = dictmapper('MetricsBase',
                                           cleanup._parse_numbers_to_int),
                           'comments': to(['comments'],
                                          cleanup._parse_numbers_to_int),
-                          'groups': to(['groups'],
+                          'html': to(['html'],
                                        cleanup._parse_numbers_to_int),
                           'likes': to(['likes'],
                                       cleanup._parse_numbers_to_int),
                           'pdf': to(['pdf'],
+                                    cleanup._parse_numbers_to_int),
+                          'readers': to(['readers'],
                                     cleanup._parse_numbers_to_int),
                           'shares': to(['shares'],
                                        cleanup._parse_numbers_to_int),
@@ -27,8 +29,8 @@ MetricsBase = dictmapper('MetricsBase',
 class Metrics(MetricsBase):
     def __repr__(self):
         return """
-<%s total:%s shares:%s citations:%s comments:%s>
-""" % (type(self).__name__, self.total, self.shares, self.citations, self.comments)
+<%s total:%s readers:%s pdf:%s html:%s comments:%s likes:%s>
+""" % (type(self).__name__, self.total, self.readers, self.pdf, self.html, self.comments, self.likes)
 
 
 SourceBase = dictmapper('SourceBase',
@@ -55,22 +57,22 @@ class Source(SourceBase):
 ArticleALMBase = dictmapper('ArticleALMBase',
                             {
                                 'doi': ['doi'],
-                                'mendeley_id': ['mendeley'],
+                                'mendeley_uuid': ['mendeley_uuid'],
                                 'pmcid': ['pmcid'],
                                 'pmid': ['pmid'],
                                 'publication_date': to(['publication_date'],
                                                        cleanup._parse_dates_to_datetime),
                                 'update_date': to(['update_date'],
                                                   cleanup._parse_dates_to_datetime),
-                                'url': ['url'],
+                                'url': ['canonical_url'],
                                 'title': ['title'],
-                                'citations': to(['citations'],
+                                'cited': to(['cited'],
                                                 cleanup._parse_numbers_to_int),
-                                'bookmarks': to(['bookmarks'],
+                                'saved': to(['saved'],
                                                 cleanup._parse_numbers_to_int),
-                                'shares': to(['shares'],
+                                'discussed': to(['discussed'],
                                              cleanup._parse_numbers_to_int),
-                                'views': to(['views'],
+                                'viewed': to(['viewed'],
                                             cleanup._parse_numbers_to_int)
                             }
 )
@@ -111,7 +113,7 @@ def get_alm(identifiers,
     :param source: One or more of the many sources.
     :param rows: Number of results to return, use in combination with page.
     :param page: Page to return, use in combination with rows.
-    :param instance: One of plos, etc., Only plos works right now.
+    :param instance: One of plos, elife, crossref, pkp, pensoft, or copernicus.
 
     Usage:
     >>> import pyalm

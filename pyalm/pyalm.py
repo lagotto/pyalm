@@ -36,15 +36,19 @@ class Metrics(MetricsBase):
 SourceBase = dictmapper('SourceBase',
                         {'name': ['name'],
                          'display_name': ['display_name'],
+                         'group_name': ['group_name'],
                          'events_url': ['events_url'],
                          'update_date': to(['update_date'],
                                            cleanup._parse_dates_to_datetime),
                          'events': ['events'],
+                         'events_csl': ['events_csl'],
                          'metrics': to(['metrics'],
                                        lambda l: Metrics(l)
                                        if l is not None else None),
-                         'histories': to(['histories'],
-                                         cleanup._process_histories)
+                         'by_day': to(['by_day'],
+                                          cleanup._parse_by_date)
+                         # 'by_day': to(['by_day'],
+                         #                 cleanup._process_histories)
                         }
 )
 
@@ -60,10 +64,10 @@ ArticleALMBase = dictmapper('ArticleALMBase',
                                 'mendeley_uuid': ['mendeley_uuid'],
                                 'pmcid': ['pmcid'],
                                 'pmid': ['pmid'],
-                                'publication_date': to(['publication_date'],
-                                                       cleanup._parse_dates_to_datetime),
+                                'issued': to(['issued'],
+                                               cleanup._parse_issued),
                                 'update_date': to(['update_date'],
-                                                  cleanup._parse_dates_to_datetime),
+                                                cleanup._parse_dates_to_datetime),
                                 'url': ['canonical_url'],
                                 'title': ['title'],
                                 'cited': to(['cited'],

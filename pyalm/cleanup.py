@@ -37,9 +37,19 @@ def _process_histories(history):
     timepoints.sort(key=lambda l: l[0])
     return timepoints
 
-def _parse_by_date(datedict):
+def _parse_day(datedict):
     for d in datedict:
-        date = '-'.join({ str(d[key]) for key in ['day','month','year'] })
-        date = datetime.datetime.strptime(date, '%m-%d-%Y')
-        d['date'] = date
+        date = '-'.join([ str(d['year']), str(d['month']), str(d['day']) ])
+        d['date'] = datetime.datetime.strptime(date, '%Y-%m-%d')
+    return datedict
+
+def _parse_month(datedict):
+    for d in datedict:
+        date='-'.join([ str(d['year']), str(d['month']) ])
+        d['date'] = datetime.datetime.strptime(date, '%Y-%m')
+    return datedict
+
+def _parse_year(datedict):
+    for d in datedict:
+        d['date'] = datetime.datetime.strptime(str(d['year']), '%Y')
     return datedict

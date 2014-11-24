@@ -34,22 +34,25 @@ class Metrics(MetricsBase):
 
 
 SourceBase = dictmapper('SourceBase',
-                        {'name': ['name'],
-                         'display_name': ['display_name'],
-                         'group_name': ['group_name'],
-                         'events_url': ['events_url'],
-                         'update_date': to(['update_date'],
-                                           cleanup._parse_dates_to_datetime),
-                         'events': ['events'],
-                         'events_csl': ['events_csl'],
-                         'metrics': to(['metrics'],
-                                       lambda l: Metrics(l)
-                                       if l is not None else None),
-                         'by_day': to(['by_day'],
-                                          cleanup._parse_by_date)
-                         # 'by_day': to(['by_day'],
-                         #                 cleanup._process_histories)
-                        }
+  {
+     'name': ['name'],
+     'display_name': ['display_name'],
+     'group_name': ['group_name'],
+     'events_url': ['events_url'],
+     'update_date': to(['update_date'],
+                       cleanup._parse_dates_to_datetime),
+     'events': ['events'],
+     'events_csl': ['events_csl'],
+     'metrics': to(['metrics'],
+                   lambda l: Metrics(l)
+                   if l is not None else None),
+     'by_day': to(['by_day'],
+                      cleanup._parse_day),
+     'by_month': to(['by_month'],
+                      cleanup._parse_month),
+     'by_year': to(['by_year'],
+                      cleanup._parse_year)
+   }
 )
 
 
@@ -97,7 +100,7 @@ class ArticleALM(ArticleALMBase):
         return self._sources
 
     def __repr__(self):
-        return "<%s %s, DOI %s>" % (type(self).__name__, self.title, self.doi)
+        return "<%s %s\nDOI %s>" % (type(self).__name__, self.title, self.doi)
 
 
 def get_alm(identifiers,

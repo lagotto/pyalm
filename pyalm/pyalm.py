@@ -185,6 +185,28 @@ def get_alm(identifiers=None,
     >>>
     >>> # You can pass on additional options to requests.get
     >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="summary", timeout=0.001)
+    >>>
+    >>> # Parse events data
+    >>> from pyalm import events
+    >>> article = pyalm.get_alm("10.1371/journal.pone.0029797", info="detail")
+    >>>
+    >>> ## twitter
+    >>> [events.Tweet(x) for x in article[0].sources['twitter'].events]
+    >>> ## wikipedia
+    >>> dat = events.WikiRef(article[0].sources['wikipedia'].events)
+    >>> dat.en
+    >>> dat.fr
+    >>> ## Mendeley
+    >>> events.mendeley_events(article[0].sources['mendeley'])
+    >>> ## Facebook
+    >>> out = events.Facebook(article[0].sources['facebook'].events[0])
+    >>> out.click_count
+    >>> articles = pyalm.get_alm(info="detail", source="facebook", per_page=10)
+    >>> [events.Facebook(x.sources['facebook'].events[0]) for x in articles]
+    >>> ## CrossRef
+    >>> [events.CrossRef(x) for x in article[0].sources['crossref'].events]
+    >>> ## Nature
+    >>> [events.Nature(x) for x in article[0].sources['nature'].events]
     """
 
 

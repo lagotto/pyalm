@@ -19,7 +19,7 @@ class Contributor(ContributorBase):
         return '<%s: %s%s>' % (type(self).__name__, self.given_name, self.surname)
 
 
-CitationBase = dictmapper('CitationBase',
+CrossrefBase = dictmapper('CrossrefBase',
                             {
                              'article_title' : ['event','article_title'],
                              'doi' : ['event','doi'],
@@ -44,25 +44,28 @@ CitationBase = dictmapper('CitationBase',
                           )
 
 
-class Citation(CitationBase):
+class CrossRef(CrossrefBase):
     def __repr__(self):
         return '<%s %s:%s>' % (type(self).__name__, self.article_title, self.doi)
 
 TweetBase = dictmapper('TweetBase',
                     {
                      'created_at' : to(['event', 'created_at'],
-                                            cleanup._parse_dates_to_datetime),
+                           cleanup._parse_dates_to_datetime),
                      'id' : ['event', 'id'],
-                     'username' : ['event', 'user'],
-                     'profile_image' : ['event', 'user_profile_image'],
+                     'user' : ['event', 'user'],
+                     'user_name' : ['event', 'user_name'],
+                     'user_profile_image' : ['event', 'user_profile_image'],
                      'text' : ['event', 'text'],
-                     'url' : ['event_url']
+                     'url' : ['event_url'],
+                     'time' : ['event_time'],
+                     'event_csl' : ['event_csl']
                      }
                    )
 
 class Tweet(TweetBase):
     def __repr__(self):
-        return '<%s %s:%s>' % (type(self).__name__, self.username, self.text)
+        return '<%s %s:%s>' % (type(self).__name__, self.user, self.text)
 
 WikiBase = dictmapper('WikiBase',
                         {
@@ -93,36 +96,66 @@ class WikiRef(WikiBase):
     def __repr__(self):
         return '<%s Citations:%s>' % (type(self).__name__, self.total)
 
-MendeleyBase = dictmapper('MendeleyBase',
-                            {
-                                'reader_countries' : ['stats', 'country'],
-                                'bookmarks' : ['stats', 'readers'],
-                                'reader_status' : ['stats', 'status'],
-                                'reader_disciplines' : ['stats', 'discipline'],
-                                'uuid' : ['uuid'],
-                                'mendeley_url' : ['mendeley_url'],
-                                'related_articles' : ['related'],
-                                'categories' : ['categories'],
-                                'file_url' : ['file_url']
-                            }
-                          )
+# MendeleyBase = dictmapper('MendeleyBase',
+#                             {
+#                                 'readers' : ['events', 'readers'],
+#                                 'discipline' : ['events', 'discipline'],
+#                                 'country' : ['events', 'country'],
+#                                 'status' : ['events', 'status'],
+#                                 'events_csl' : ['events_csl']
+#                             }
+#                           )
 
-class Mendeley(MendeleyBase):
-    def __repr__(self):
-        return '<%s Bookmarks:%s>' % (type(self).__name__, self.bookmarks)
+# class Mendeley(MendeleyBase):
+#     def __repr__(self):
+#         return '<%s Readers:%s>' % (type(self).__name__, self.readers)
+
+def mendeley_events(object):
+    out = object.events
+    out['url'] = object.events_url
+    out['events_csl'] = object.events_csl
+    out['events_url'] = object.events_url
+    return out
 
 FacebookBase = dictmapper('FacebookBase',
                             {
-                                'normalized_url' : ['normalized_url'],
-                                'commentsbox_count' : ['commentsbox_count'],
-                                'click_count' : ['click_count'],
-                                'total_count' : ['total_count'],
-                                'comment_count' : ['comment_count'],
+                                'url' : ['url'],
+                                'share_count' : ['share_count'],
                                 'like_count' : ['like_count'],
-                                'comments_fbid' : ['comments_fbid'],
-                                'share_count' : ['share_count']
+                                'comment_count' : ['comment_count'],
+                                'click_count' : ['click_count'],
+                                'total_count' : ['total_count']
                             }
                           )
+
 class Facebook(FacebookBase):
     def __repr__(self):
         return '<%s Total:%s>' % (type(self).__name__, self.total_count)
+
+NatureBase = dictmapper('NatureBase',
+                    {
+                     'blog' : ['event', 'blog'],
+                     'links_to_doi' : ['event', 'links_to_doi'],
+                     'percent_complex_words' : ['event', 'percent_complex_words'],
+                    'popularity' : ['event', 'popularity'],
+                    'created_at' : ['event', 'created_at'],
+                    'title' : ['event', 'title'],
+                    'body' : ['event', 'body'],
+                    'updated_at' : ['event', 'updated_at'],
+                    'flesch' : ['event', 'flesch'],
+                    'url' : ['event', 'url'],
+                    'blog_id' : ['event', 'blog_id'],
+                    'id' : ['event', 'id'],
+                    'hashed_id' : ['event', 'hashed_id'],
+                    'num_words' : ['event', 'num_words'],
+                    'published_at' : ['event', 'published_at'],
+                    'fog' : ['event', 'fog'],
+                    'event_time' : ['event_time'],
+                    'event_url' : ['event_url'],
+                    'event_csl' : ['event_csl']
+                     }
+                   )
+
+class Nature(NatureBase):
+    def __repr__(self):
+        return '<%s :%s>' % (type(self).__name__, self.title)

@@ -100,14 +100,16 @@ class ArticleALM(ArticleALMBase):
         return self._sources
 
     def __repr__(self):
-        return "<%s %s\nDOI %s>" % (type(self).__name__, self.title, self.doi)
+        return "<%s %s, DOI %s>" % (type(self).__name__, self.title, self.doi)
 
 
-def get_alm(identifiers,
+def get_alm(identifiers=None,
             id_type=None,
             info=None,
             source=None,
-            rows=None,
+            publisher=None,
+            order=None,
+            per_page=None,
             page=None,
             instance='plos',
             **kwargs):
@@ -118,18 +120,30 @@ def get_alm(identifiers,
     :param api_key: An API key, looks for api key first, or pass one in.
     :param id_type: One of doi, pmid, pmcid, or mendeley_uuid
     :param info: One of summary or detail
-    :param source: One or more of the many sources.
-    :param rows: Number of results to return, use in combination with page.
-    :param page: Page to return, use in combination with rows.
+    :param source: One source. To get many sources, make many calls.
+    :param publisher: Filter articles to a given publisher, using a crossref_id.
+    :para order: Results are sorted by descending event count when given the source
+      name, e.g. &order=wikipedia. Otherwise (the default) results are sorted by
+      date descending. When using &source=x, we can only sort by data or that source,
+      not a different source.
+    :param per_page: Number of results to return, use in combination with page.
+    :param page: Page to return, use in combination with per_page.
     :param instance: One of plos, elife, crossref, pkp, pensoft, or copernicus.
     :param **kwargs: Additional named arguments passed on to requests.get
 
     Usage:
     >>> import pyalm
+    >>>
     >>> # Get a single article
     >>> article = pyalm.get_alm("10.1371/journal.pone.0029797", info="summary")
     >>> article
     >>> article[0].title
+    >>>
+    >>> # Get summary or detailed data
+    >>> ## summary
+    >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="summary")[0]._resp_json
+    >>> ## detail
+    >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="detail")[0]._resp_json
     >>>
     >>> # Multiple articles
     >>> ids = ["10.1371/journal.pone.0029797","10.1371/journal.pone.0029798"]
@@ -139,21 +153,53 @@ def get_alm(identifiers,
     >>>     print article.title,"DOI:", article.doi,
     >>>     print "Views:", article.views
     >>>
+    >>> # Search by source
+    >>> articles = pyalm.get_alm(source="mendeley", info="summary")
+    >>>
+    >>> # Search by publisher
+    >>> ## first, get some publisher ids via the CrossRef API
+    >>> import requests
+    >>> ids = requests.get("http://api.crossref.org/members")
+    >>> id = [x['id'] for x in ids.json()['message']['items']][0]
+    >>> pyalm.get_alm(publisher=id, info="summary")
+    >>>
+    >>> # Order results
+    >>> ## order by a source, orders by descending event count in that source
+    >>> articles = pyalm.get_alm(order="mendeley", per_page=10)
+    >>> [x.sources['mendeley'].metrics.total for x in articles]
+    >>>
+    >>> ## not specifying an order, results sorted by date descending
+    >>> articles = pyalm.get_alm(info="summary")
+    >>> [ x.update_date for x in articles ]
+    >>>
+    >>> # Paging
+    >>> pyalm.get_alm(source="mendeley", info="summary", per_page=1)
+    >>> pyalm.get_alm(source="mendeley", info="summary", per_page=2)
+    >>> pyalm.get_alm(source="mendeley", info="summary", per_page=2, page=10)
+    >>>
+    >>> # Search against other Lagotto instances
+    >>> pyalm.get_alm(instance="crossref", per_page=5)
+    >>> pyalm.get_alm(instance="pkp", per_page=5)
+    >>> pyalm.get_alm(instance="elife", per_page=5)
+    >>> pyalm.get_alm(instance="pensoft")
+    >>>
     >>> # You can pass on additional options to requests.get
     >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="summary", timeout=0.001)
     """
 
 
-    if type(identifiers) != str:
+    if type(identifiers) != str and identifiers != None:
         identifiers = ','.join(identifiers)
 
     parameters = {'ids': identifiers,
-                  'api_key': config.APIS.get(instance).get('key'),
                   'type': id_type,
                   'info': info,
                   'source': source,
-                  'rows': rows,
-                  'page': page
+                  'publisher': publisher,
+                  'order': order,
+                  'per_page': per_page,
+                  'page': page,
+                  'api_key': config.APIS.get(instance).get('key'),
     }
 
     url = config.APIS.get(instance).get('url')

@@ -109,7 +109,8 @@ def get_alm(identifiers,
             source=None,
             rows=None,
             page=None,
-            instance='plos'):
+            instance='plos',
+            **kwargs):
     """
     Get summary level alms based on an identifier or identifiers
 
@@ -121,6 +122,7 @@ def get_alm(identifiers,
     :param rows: Number of results to return, use in combination with page.
     :param page: Page to return, use in combination with rows.
     :param instance: One of plos, elife, crossref, pkp, pensoft, or copernicus.
+    :param **kwargs: Additional named arguments passed on to requests.get
 
     Usage:
     >>> import pyalm
@@ -136,6 +138,9 @@ def get_alm(identifiers,
     >>> for article in articles:
     >>>     print article.title,"DOI:", article.doi,
     >>>     print "Views:", article.views
+    >>>
+    >>> # You can pass on additional options to requests.get
+    >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="summary", timeout=0.001)
     """
 
 
@@ -155,7 +160,7 @@ def get_alm(identifiers,
     if url:
         resp = requests.get(url,
                             params=parameters,
-                            headers=BASE_HEADERS)
+                            headers=BASE_HEADERS, **kwargs)
 
         resp.raise_for_status()
 

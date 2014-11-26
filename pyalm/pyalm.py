@@ -207,8 +207,69 @@ def get_alm(identifiers=None,
     >>> [events.CrossRef(x) for x in article[0].sources['crossref'].events]
     >>> ## Nature
     >>> [events.Nature(x) for x in article[0].sources['nature'].events]
+    >>> ## Pubmed
+    >>> out = [events.Pubmed(x) for x in article[0].sources['pubmed'].events]
+    >>> out[0].event
+    >>> out[0].event_url
+    >>> ## Counter (PLOS views data)
+    >>> events.Counter(article[0].sources['counter'].events[0])
+    >>> [events.Counter(x) for x in article[0].sources['counter'].events]
+    >>> ## Research Blogging
+    >>> out = events.ResearchBlogging(article[0].sources['researchblogging'].events[0])
+    >>> out.blog_name
+    >>> out.citations
+    >>> [ x['full_citation'] for x in out.citations ]
+    >>> [events.ResearchBlogging(x) for x in article[0].sources['researchblogging'].events]
+    >>> ## PMC
+    >>> out = events.PMC(article[0].sources['pmc'].events[0])
+    >>> out.pdf
+    >>> out.full_text
+    >>> [events.PMC(x) for x in article[0].sources['pmc'].events]
+    >>> ## Figshare
+    >>> out = events.Figshare(article[0].sources['figshare'].events[0])
+    >>> out.doi
+    >>> out.files
+    >>> [events.Figshare(x) for x in article[0].sources['figshare'].events]
+    >>> ## PLOS journal comments
+    >>> out = events.PlosComments(article[0].sources['plos_comments'].events[0])
+    >>> out.title
+    >>> out.event_time.isoformat()
+    >>> [events.PlosComments(x) for x in article[0].sources['plos_comments'].events]
+    >>> ## Sciencseeker
+    >>> articles = pyalm.get_alm(info="detail", source="scienceseeker", order="scienceseeker")
+    >>> out = events.Scienceseeker(articles[0].sources['scienceseeker'].events[0])
+    >>> out.title
+    >>> out.event_time.isoformat()
+    >>> [events.Scienceseeker(x.sources['scienceseeker'].events[0]) for x in articles]
+    >>> ## f1000
+    >>> article = pyalm.get_alm("10.1371/journal.pbio.1001041", info="detail")
+    >>> out = events.F1000(article[0].sources['f1000'].events[0])
+    >>> out.updated_at
+    >>> [events.F1000(x) for x in article[0].sources['f1000'].events]
+    >>> ## Wordpress
+    >>> article = pyalm.get_alm("10.1371/journal.pcbi.1000361", info="detail")
+    >>> out = events.Wordpress(article[0].sources['wordpress'].events[0])
+    >>> out.title
+    >>> out.event_time.isoformat()
+    >>> [events.Wordpress(x) for x in article[0].sources['wordpress'].events]
+    >>> ## Reddit
+    >>> article = pyalm.get_alm("10.1371/journal.pone.0111081", info="detail")
+    >>> out = events.Reddit(article[0].sources['reddit'].events[0])
+    >>> out.title
+    >>> out.event_time.isoformat()
+    >>> [events.Reddit(x) for x in article[0].sources['reddit'].events]
+    >>> ## Datacite
+    >>> article = pyalm.get_alm("10.1371/journal.pone.0081508", info="detail")
+    >>> out = events.Datacite(article[0].sources['datacite'].events[0])
+    >>> out.creator
+    >>> out.title
+    >>> [events.Datacite(x) for x in article[0].sources['datacite'].events]
+    >>> ## Articlecoverage and Articlecoveragecurated
+    >>> article = pyalm.get_alm("10.1371/journal.pmed.0020124", info="detail")
+    >>> events.Articlecoverage(article[0].sources['articlecoverage'].events[0])
+    >>> events.ArticlecoverageCurated(article[0].sources['articlecoveragecurated'].events[0])
+    >>> [events.Articlecoverage(x) for x in article[0].sources['articlecoverage'].events]
     """
-
 
     if type(identifiers) != str and identifiers != None:
         identifiers = ','.join(identifiers)

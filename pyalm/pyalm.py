@@ -136,22 +136,24 @@ def get_alm(identifiers=None,
     >>>
     >>> # Get a single article
     >>> article = pyalm.get_alm("10.1371/journal.pone.0029797", info="summary")
-    >>> article
-    >>> article[0].title
+    >>> article['meta']
+    >>> article['meta']['total']
+    >>> article['articles']
+    >>> article['articles'][0].title
     >>>
     >>> # Get summary or detailed data
     >>> ## summary
-    >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="summary")[0]._resp_json
+    >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="summary")['articles'][0]._resp_json
     >>> ## detail
-    >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="detail")[0]._resp_json
+    >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="detail")['articles'][0]._resp_json
     >>>
     >>> # Multiple articles
     >>> ids = ["10.1371/journal.pone.0029797","10.1371/journal.pone.0029798"]
     >>> articles = pyalm.get_alm(ids, info="summary")
-    >>> len(articles)
-    >>> for article in articles:
+    >>> len(articles['articles'])
+    >>> for article in articles['articles']:
     >>>     print article.title,"DOI:", article.doi,
-    >>>     print "Views:", article.views
+    >>>     print "Views:", article.viewed
     >>>
     >>> # Search by source
     >>> articles = pyalm.get_alm(source="mendeley", info="summary")
@@ -166,11 +168,11 @@ def get_alm(identifiers=None,
     >>> # Order results
     >>> ## order by a source, orders by descending event count in that source
     >>> articles = pyalm.get_alm(order="mendeley", per_page=10)
-    >>> [x.sources['mendeley'].metrics.total for x in articles]
+    >>> [x.sources['mendeley'].metrics.total for x in articles['articles']]
     >>>
     >>> ## not specifying an order, results sorted by date descending
     >>> articles = pyalm.get_alm(info="summary")
-    >>> [ x.update_date for x in articles ]
+    >>> [ x.update_date for x in articles['articles'] ]
     >>>
     >>> # Paging
     >>> pyalm.get_alm(source="mendeley", info="summary", per_page=1)
@@ -181,7 +183,6 @@ def get_alm(identifiers=None,
     >>> pyalm.get_alm(instance="crossref", per_page=5)
     >>> pyalm.get_alm(instance="pkp", per_page=5)
     >>> pyalm.get_alm(instance="elife", per_page=5)
-    >>> pyalm.get_alm(instance="pensoft")
     >>>
     >>> # You can pass on additional options to requests.get
     >>> pyalm.get_alm("10.1371/journal.pone.0029797", info="summary", timeout=0.001)
@@ -191,50 +192,50 @@ def get_alm(identifiers=None,
     >>> article = pyalm.get_alm("10.1371/journal.pone.0029797", info="detail")
     >>>
     >>> ## twitter
-    >>> [events.Tweet(x) for x in article[0].sources['twitter'].events]
+    >>> [events.Tweet(x) for x in article['articles'][0].sources['twitter'].events]
     >>> ## wikipedia
-    >>> dat = events.WikiRef(article[0].sources['wikipedia'].events)
+    >>> dat = events.WikiRef(article['articles'][0].sources['wikipedia'].events)
     >>> dat.en
     >>> dat.fr
     >>> ## Mendeley
-    >>> events.mendeley_events(article[0].sources['mendeley'])
+    >>> events.mendeley_events(article['articles'][0].sources['mendeley'])
     >>> ## Facebook
-    >>> out = events.Facebook(article[0].sources['facebook'].events[0])
+    >>> out = events.Facebook(article['articles'][0].sources['facebook'].events[0])
     >>> out.click_count
     >>> articles = pyalm.get_alm(info="detail", source="facebook", per_page=10)
-    >>> [events.Facebook(x.sources['facebook'].events[0]) for x in articles]
+    >>> [events.Facebook(x.sources['facebook'].events[0]) for x in articles['articles']]
     >>> ## CrossRef
-    >>> [events.CrossRef(x) for x in article[0].sources['crossref'].events]
+    >>> [events.CrossRef(x) for x in article['articles'][0].sources['crossref'].events]
     >>> ## Nature
-    >>> [events.Nature(x) for x in article[0].sources['nature'].events]
+    >>> [events.Nature(x) for x in article['articles'][0].sources['nature'].events]
     >>> ## Pubmed
-    >>> out = [events.Pubmed(x) for x in article[0].sources['pubmed'].events]
+    >>> out = [events.Pubmed(x) for x in article['articles'][0].sources['pubmed'].events]
     >>> out[0].event
     >>> out[0].event_url
     >>> ## Counter (PLOS views data)
-    >>> events.Counter(article[0].sources['counter'].events[0])
-    >>> [events.Counter(x) for x in article[0].sources['counter'].events]
+    >>> events.Counter(article['articles'][0].sources['counter'].events[0])
+    >>> [events.Counter(x) for x in article['articles'][0].sources['counter'].events]
     >>> ## Research Blogging
-    >>> out = events.ResearchBlogging(article[0].sources['researchblogging'].events[0])
+    >>> out = events.ResearchBlogging(article['articles'][0].sources['researchblogging'].events[0])
     >>> out.blog_name
     >>> out.citations
     >>> [ x['full_citation'] for x in out.citations ]
-    >>> [events.ResearchBlogging(x) for x in article[0].sources['researchblogging'].events]
+    >>> [events.ResearchBlogging(x) for x in article['articles'][0].sources['researchblogging'].events]
     >>> ## PMC
-    >>> out = events.PMC(article[0].sources['pmc'].events[0])
+    >>> out = events.PMC(article['articles'][0].sources['pmc'].events[0])
     >>> out.pdf
     >>> out.full_text
-    >>> [events.PMC(x) for x in article[0].sources['pmc'].events]
+    >>> [events.PMC(x) for x in article['articles'][0].sources['pmc'].events]
     >>> ## Figshare
-    >>> out = events.Figshare(article[0].sources['figshare'].events[0])
+    >>> out = events.Figshare(article['articles'][0].sources['figshare'].events[0])
     >>> out.doi
     >>> out.files
-    >>> [events.Figshare(x) for x in article[0].sources['figshare'].events]
+    >>> [events.Figshare(x) for x in article['articles'][0].sources['figshare'].events]
     >>> ## PLOS journal comments
-    >>> out = events.PlosComments(article[0].sources['plos_comments'].events[0])
+    >>> out = events.PlosComments(article['articles'][0].sources['plos_comments'].events[0])
     >>> out.title
     >>> out.event_time.isoformat()
-    >>> [events.PlosComments(x) for x in article[0].sources['plos_comments'].events]
+    >>> [events.PlosComments(x) for x in article['articles'][0].sources['plos_comments'].events]
     >>> ## Sciencseeker
     >>> articles = pyalm.get_alm(info="detail", source="scienceseeker", order="scienceseeker")
     >>> out = events.Scienceseeker(articles[0].sources['scienceseeker'].events[0])
@@ -243,32 +244,32 @@ def get_alm(identifiers=None,
     >>> [events.Scienceseeker(x.sources['scienceseeker'].events[0]) for x in articles]
     >>> ## f1000
     >>> article = pyalm.get_alm("10.1371/journal.pbio.1001041", info="detail")
-    >>> out = events.F1000(article[0].sources['f1000'].events[0])
+    >>> out = events.F1000(article['articles'][0].sources['f1000'].events[0])
     >>> out.updated_at
-    >>> [events.F1000(x) for x in article[0].sources['f1000'].events]
+    >>> [events.F1000(x) for x in article['articles'][0].sources['f1000'].events]
     >>> ## Wordpress
     >>> article = pyalm.get_alm("10.1371/journal.pcbi.1000361", info="detail")
-    >>> out = events.Wordpress(article[0].sources['wordpress'].events[0])
+    >>> out = events.Wordpress(article['articles'][0].sources['wordpress'].events[0])
     >>> out.title
     >>> out.event_time.isoformat()
-    >>> [events.Wordpress(x) for x in article[0].sources['wordpress'].events]
+    >>> [events.Wordpress(x) for x in article['articles'][0].sources['wordpress'].events]
     >>> ## Reddit
     >>> article = pyalm.get_alm("10.1371/journal.pone.0111081", info="detail")
-    >>> out = events.Reddit(article[0].sources['reddit'].events[0])
+    >>> out = events.Reddit(article['articles'][0].sources['reddit'].events[0])
     >>> out.title
     >>> out.event_time.isoformat()
-    >>> [events.Reddit(x) for x in article[0].sources['reddit'].events]
+    >>> [events.Reddit(x) for x in article['articles'][0].sources['reddit'].events]
     >>> ## Datacite
     >>> article = pyalm.get_alm("10.1371/journal.pone.0081508", info="detail")
-    >>> out = events.Datacite(article[0].sources['datacite'].events[0])
+    >>> out = events.Datacite(article['articles'][0].sources['datacite'].events[0])
     >>> out.creator
     >>> out.title
-    >>> [events.Datacite(x) for x in article[0].sources['datacite'].events]
+    >>> [events.Datacite(x) for x in article['articles'][0].sources['datacite'].events]
     >>> ## Articlecoverage and Articlecoveragecurated
     >>> article = pyalm.get_alm("10.1371/journal.pmed.0020124", info="detail")
-    >>> events.Articlecoverage(article[0].sources['articlecoverage'].events[0])
-    >>> events.ArticlecoverageCurated(article[0].sources['articlecoveragecurated'].events[0])
-    >>> [events.Articlecoverage(x) for x in article[0].sources['articlecoverage'].events]
+    >>> events.Articlecoverage(article['articles'][0].sources['articlecoverage'].events[0])
+    >>> events.ArticlecoverageCurated(article['articles'][0].sources['articlecoveragecurated'].events[0])
+    >>> [events.Articlecoverage(x) for x in article['articles'][0].sources['articlecoverage'].events]
     """
 
     if type(identifiers) != str and identifiers != None:
@@ -293,11 +294,12 @@ def get_alm(identifiers=None,
 
         resp.raise_for_status()
 
+        meta = _get_meta(resp.json(), 'data')
         articles = []
         for article_json in resp.json()['data']:
             articles.append(_process_json_to_article(article_json))
 
-        return articles
+        return { "meta": meta, "articles": articles }
 
     else:
         raise
@@ -308,3 +310,7 @@ def _process_json_to_article(article_json):
     article._sources = {}
     article._resp_json = article_json
     return article
+
+def _get_meta(res, key):
+  res.pop(key, None)
+  return res

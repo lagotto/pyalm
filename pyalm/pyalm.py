@@ -275,6 +275,13 @@ def get_alm(identifiers=None,
     if type(identifiers) != str and identifiers != None:
         identifiers = ','.join(identifiers)
 
+    _test_length(source)
+    _test_int('page', page)
+    _test_int('per_page', per_page)
+    _test_values('info', info, ['summary','detail'])
+    _test_values('id_type', id_type, ['doi','pmid','pmcid','mendeley_uuid'])
+    _test_values('instance', instance, ['plos','crossref','copernicus','elife','pensoft','pkp'])
+
     parameters = {'ids': identifiers,
                   'type': id_type,
                   'info': info,
@@ -304,7 +311,6 @@ def get_alm(identifiers=None,
     else:
         raise
 
-
 def _process_json_to_article(article_json):
     article = ArticleALM(article_json)
     article._sources = {}
@@ -314,3 +320,19 @@ def _process_json_to_article(article_json):
 def _get_meta(res, key):
   res.pop(key, None)
   return res
+
+def _test_length(input):
+    if type(input) != None and len(input) > 1: raise TypeError('Parameter "source" must be either None or length 1')
+
+def _test_int(name, input):
+    if type(input) != None and type(input) != int: raise TypeError('Parameter "%s" must be type int' % name)
+
+def _test_values(name, input, values):
+  if input.__class__ == str:
+    input = input.split(' ')
+  if type(input) != None:
+    if len(input) > 1: raise TypeError('Parameter "%s" must be length 1' % name)
+    if input[0] not in values: raise TypeError('Parameter "%s" must be one of %s' % (name, values))
+
+def get_locals(input, values):
+  return locals().values()

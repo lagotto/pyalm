@@ -275,11 +275,11 @@ def get_alm(identifiers=None,
     if type(identifiers) != str and identifiers != None:
         identifiers = ','.join(identifiers)
 
-    _test_length(source)
-    _test_int('page', page)
-    _test_int('per_page', per_page)
+    # _test_length(source)
+    # _test_int('page', page)
+    # _test_int('per_page', per_page)
     _test_values('info', info, ['summary','detail'])
-    _test_values('id_type', id_type, ['doi','pmid','pmcid','mendeley_uuid'])
+    # _test_values('id_type', id_type, ['doi','pmid','pmcid','mendeley_uuid'])
     _test_values('instance', instance, ['plos','crossref','copernicus','elife','pensoft','pkp'])
 
     parameters = {'ids': identifiers,

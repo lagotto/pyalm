@@ -57,14 +57,23 @@ class Request:
     Base class for a PLOS Search API Request Object
     """
 
-    def __init__(self, query = {}, fields = ['doi'], instance = 'plos',
+    def __init__(self, query = None, fields = None, instance = 'plos',
                 start=0, limit=99, maxRows=100, verbose=False, delay = 0.5):
+      
+        if query is None:
+            self.query = {}
+        else:
+            self.query = query
+            
+        if fields is None:
+            self.fields = ['doi']
+        else:
+            self.fields = fields
+            
         self.start = start
         self.limit = limit
         self.maxrows = limit if limit < maxRows else maxRows
         self.delay = delay
-        self.query = query
-        self.fields = fields
         self.instance = instance
         self.api_key = pyalm.config.APIS.get(self.instance).get('key')
         self._query_text = ''
